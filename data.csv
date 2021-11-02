@@ -1,5 +1,5 @@
-Prenom;NOM
-Stanislas;MEZUREUX
-Alice;ESPINOSA
-Matthieu;SPEISMANN
-Corentin;BILLARD
+Prenom;NOM;email
+Stanislas;MEZUREUX;stanmzx@gmail.com
+Alice;ESPINOSA;stanmzx@gmail.com
+Matthieu;SPEISMANN;stanmzx@gmail.com
+Corentin;BILLARD;stanmzx@gmail.com
