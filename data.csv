@@ -1,5 +1,9 @@
-Prenom;NOM;email
-Stanislas;MEZUREUX;stanmzx@gmail.com
-Alice;ESPINOSA;stanmzx@gmail.com
-Matthieu;SPEISMANN;stanmzx@gmail.com
-Corentin;BILLARD;stanmzx@gmail.com
+Prenom,NOM,Team,email
+Stanislas,MEZUREUX,MPSI1,stanmzx@gmail.com
+Alice,ESPINOSA,MPSI2,stanmzx@gmail.com
+Matthieu,SPEISMANN,MPSI1,stanmzx@gmail.com
+Corentin,BILLARD,MPSI2,stanmzx@gmail.com
+Quentin,ROLLET,MPSI1,stanmzx@gmail.com
+Yann,DIONISIO,MPSI2,stanmzx@gmail.com
+Clément,MAILFERT,MPSI1,stanmzx@gmail.com
+Virgil,PIETRI,MPSI2,stanmzx@gmail.com
