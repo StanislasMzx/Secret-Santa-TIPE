@@ -4,6 +4,9 @@ import copy
 import secrets
 
 AMOUNT = 10
+NAME = 'MPSI1 227/228'
+DATE = '03/01/2022'
+
 
 class TooMuchInTheTeam(Exception):
     pass
@@ -39,8 +42,6 @@ def make_pairs(L):
     R = []
     M = copy.deepcopy(L)
     shuffle(M)
-    for e in M:
-        shuffle(e)
     L_new = copy.deepcopy(M)
     nb_teams = len(L_new)
     for i, team in enumerate(L_new):
@@ -69,8 +70,8 @@ def send_email(L):
 
     for e in L:
         to_addrs = e[0][3]
-        subject = "Secret Santa - Tirage au sort"
-        text = f"Bonjour {e[0][0]},\nCette année, tu es en charge du cadeau de {e[1][0]} {e[1][1]} ({e[1][2]}). Je te rappelle que le budget est de {AMOUNT}€.\nJoyeux Nöel à toi !"
+        subject = f"Secret Santa - {NAME}"
+        text = f"Bonjour {e[0][0]},\nCette année, tu es en charge du cadeau de {e[1][0]} {e[1][1]} ({e[1][2]}). Je te rappelle que le budget est de {AMOUNT}€ et que la célébration aura lieu le {DATE}.\nJoyeux Nöel à toi !"
 
         message = f"Subject: {subject}\nFrom: {from_addr}\nTo: {to_addrs}\n\n"
         message = message + text
@@ -82,7 +83,9 @@ def Secret_Santa(file):
     try:
         L = group_by_team(csv_to_list(file))
         nb_participants_check(L)
-        send_email(make_pairs(L))
+        R = make_pairs(L)
+        print(R)
+        send_email(R)
     except TooMuchInTheTeam as TeamError:
         print(TeamError)
 
