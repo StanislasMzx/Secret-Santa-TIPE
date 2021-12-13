@@ -1,0 +1,4 @@
+>> Semaine du 13/12/2021 :
+  - RDV TIPE mercredi
+  - Correction de l'issue #2
+  - Recherche et test des modules pour le chiffrement homomorphe
