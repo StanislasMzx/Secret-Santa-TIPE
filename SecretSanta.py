@@ -12,11 +12,13 @@ DATE = '03/01/2022'
 class TooMuchInTheTeam(Exception):
     pass
 
+
 def nb_participants_check(L):
     for i, team in enumerate(L):
         M = [e for A in L[:i]+L[i+1:] for e in A]
         if M != [] and len(M) < len(L[i]):
             raise TooMuchInTheTeam(f"Too much participants in {team[0][2]}")
+
 
 def csv_to_list(file):
     with open(file) as f:
@@ -25,6 +27,7 @@ def csv_to_list(file):
     for i, e in enumerate(L):
         L[i] = e.split(',')
     return L
+
 
 def group_by_team(L):
     teams = []
@@ -39,6 +42,7 @@ def group_by_team(L):
                 M[i].append(e)
     return M
 
+
 def make_pairs(L):
     nb_teams = len(L)
     if nb_teams == 1:
@@ -47,7 +51,7 @@ def make_pairs(L):
         length = len(M)
         R = [([], [])]*length
         for i, e in enumerate(M):
-            R[i] = (M[i], M[(i+1)%length])
+            R[i] = (M[i], M[(i+1) % length])
         return R
     R = []
     M = copy.deepcopy(L)
@@ -58,7 +62,7 @@ def make_pairs(L):
             if len(M) == 1:
                 M_next = M[0]
             else:
-                M_next =  (M[:i]+M[i+1:])[(j+1)%(len(M)-1)]
+                M_next = (M[:i]+M[i+1:])[(j+1) % (len(M)-1)]
             M_next_len = len(M_next)
             k = secrets.randbelow(M_next_len)
             gift_to = M_next[k]
@@ -67,6 +71,7 @@ def make_pairs(L):
             if M_next_len == 1:
                 M = [e for e in M if e != []]
     return R
+
 
 def send_email(L):
     from_addr = 'secret.santa.tipe@gmail.com'
@@ -80,7 +85,10 @@ def send_email(L):
     for e in L:
         to_addrs = e[0][3]
         subject = f"Secret Santa - {NAME}"
-        text = f"Bonjour {e[0][0]},\nCette année, tu es en charge du cadeau de {e[1][0]} {e[1][1]} ({e[1][2]}). Je te rappelle que le budget est de {AMOUNT}€ et que la célébration aura lieu le {DATE}.\nJoyeux Nöel à toi !"
+        text = f'Bonjour {e[0][0]},\nCette année, tu es en charge du cadeau'\
+               f' de {e[1][0]} {e[1][1]} ({e[1][2]}). Je te rappelle que le'\
+               f' budget est de {AMOUNT}€ et que la célébration aura lieu le'\
+               f' {DATE}.\nJoyeux Nöel à toi !'
 
         message = f"Subject: {subject}\nFrom: {from_addr}\nTo: {to_addrs}\n\n"
         message = message + text
@@ -89,6 +97,7 @@ def send_email(L):
         time.sleep(0.1)
 
     server.quit()
+
 
 def Secret_Santa(file):
     try:
