@@ -7,6 +7,7 @@ The purpose of this project is simple, to automate the famous tradition of the s
 - [x] Sending emails
 - [x] Data protection
 - [x] Exception management (no draws within the same group)
+- [x] Possibility to store the printout locally
 - [ ] Possibility to store the printout online
 - [ ] Zero-knowledge proof
 
