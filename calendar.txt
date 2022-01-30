@@ -11,3 +11,8 @@
 >> Semaine du 03/01/2022 :
   - V1 MCOT
   - RDV TIPE mercredi
+
+>> Semaine du 17/01/2022 : 
+  - RDV TIPE mercredi 
+  - Implémentation zero-knowledge proof
+  - Craig Gentry remplacé par ElGamal

@@ -3,7 +3,8 @@ from random import shuffle
 import copy
 import secrets
 import time
-import craig_gentry as cg
+import elgamal as eg
+from math import factorial
 
 AMOUNT = 10
 NAME = 'MPSI1 227/228'
@@ -52,10 +53,10 @@ def make_pairs(L, pk):
         length = len(M)
         R = [(0, 0)]*length
         for i in range(length):
-            R[i] = (cg.encryptInt(pk, M[i]),
-                    cg.encryptInt(pk, M[(i+1) % length]))
-            with open('secret_santa_draw.py', 'w') as f:
-                f.write(f'draw = {R}')
+            R[i] = (eg.encrypt(M[i]+1, pk),
+                    eg.encrypt(M[(i+1) % length]+1, pk))
+        with open('secret_santa_draw.py', 'w') as f:
+            f.write(f'draw = {R}')
         return R
     R = []
     M = copy.deepcopy(L)
@@ -70,17 +71,17 @@ def make_pairs(L, pk):
             M_next_len = len(M_next)
             k = secrets.randbelow(M_next_len)
             gift_to = M_next[k]
-            R.append((cg.encryptInt(pk, e),
-                      cg.encryptInt(pk, gift_to)))
-            with open('secret_santa_draw.py', 'w') as f:
-                f.write(f'draw = {R}')
+            R.append((eg.encrypt(e+1, pk),
+                      eg.encrypt(gift_to+1, pk)))
+            with open('example/secret_santa_draw.py', 'w') as f:
+                f.write(f'draw = {R}\ndraw_len = {len(R)}')
             del M_next[k]
             if M_next_len == 1:
                 M = [e for e in M if e != []]
     return R
 
 
-def send_email(L, data, sk, display_team=True):
+def send_email(L, data, sk, pk, display_team=True):
     from_addr = 'secret.santa.tipe@gmail.com'
 
     server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
@@ -90,8 +91,8 @@ def send_email(L, data, sk, display_team=True):
     server.login('secret.santa.tipe@gmail.com', 'H)W8x{-Kc#=qN5g8')
 
     for e_encrypted in L:
-        e = (cg.decryptInt(sk, e_encrypted[0]),
-             cg.decryptInt(sk, e_encrypted[1]))
+        e = (eg.decrypt(e_encrypted[0], sk, pk)-1,
+             eg.decrypt(e_encrypted[1], sk, pk)-1)
         to_addrs = data[e[0]][4]
         subject = f"Secret Santa - {NAME}"
         text = (
@@ -111,28 +112,41 @@ def send_email(L, data, sk, display_team=True):
     server.quit()
 
 
+def zero_knowledge_proof(sk, pk):
+    import example.secret_santa_draw as ssd
+    if ssd.draw_len == 1:
+        return True
+    gift_from = ssd.draw[0][0]
+    gift_to =  ssd.draw[0][1]
+    for i in range(1, ssd.draw_len):
+        gift_from = eg.multiply(gift_from, ssd.draw[i][0])
+        gift_to = eg.multiply(gift_to, ssd.draw[i][1])
+    fact = factorial(ssd.draw_len)
+    return eg.decrypt(gift_from, sk, pk) == fact and eg.decrypt(gift_to, sk, pk) == fact
+
+
 def Secret_Santa(data):
     try:
-        sk, pk = cg.keygen()
+        sk, pk = eg.keygen()
         info = csv_to_list(data)
         L = group_by_team(info)
         nb_teams = len(L)
         nb_participants_check(L)
         R = make_pairs(L, pk)
         print(f'secret key : {sk}')
-        # print(R)
-        send_email(R, info, sk, nb_teams != 1)
+        print(f'public key : {pk}')
+        # send_email(R, info, sk, pk, nb_teams != 1)
     except TooMuchInTheTeam as TeamError:
         print(TeamError)
 
 
-def resend(sk, data):
+def resend(sk, pk, data):
     try:
-        import secret_santa_draw as ssd
+        import example.secret_santa_draw as ssd
         info = csv_to_list(data)
         nb_teams = len(ssd.draw)
-        send_email(ssd.draw, info, sk, nb_teams != 1)
+        send_email(ssd.draw, info, sk, pk, nb_teams != 1)
     except ModuleNotFoundError as Error:
         print(Error)
 
-Secret_Santa('data.csv')
+# Secret_Santa('example/data.csv')

@@ -9,6 +9,6 @@ The purpose of this project is simple, to automate the famous tradition of the s
 - [x] Exception management (no draws within the same group)
 - [x] Possibility to store the printout locally
 - [ ] Possibility to store the printout online
-- [ ] Zero-knowledge proof
+- [x] Zero-knowledge proof
 
 The principle and a demonstration can be found in the [following presentation](TIPE_Presentation.pdf)
