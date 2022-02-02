@@ -88,7 +88,7 @@ def send_email(L, data, sk, pk, display_team=True):
     server.set_debuglevel(1)
     server.ehlo
 
-    server.login('secret.santa.tipe@gmail.com', 'H)W8x{-Kc#=qN5g8')
+    server.login('secret.santa.tipe@gmail.com', 'pamnkvauruvqndga')
 
     for e_encrypted in L:
         e = (eg.decrypt(e_encrypted[0], sk, pk)-1,
