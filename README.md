@@ -11,4 +11,4 @@ The purpose of this project is simple, to automate the famous tradition of the s
 - [ ] Possibility to store the printout online
 - [x] Zero-knowledge proof
 
-The principle and a demonstration can be found in the [following presentation](TIPE_Presentation.pdf)
+The principle and a demonstration can be found here : [research paper](/research%20paper/research_paper.pdf) | [presentation](presentation/presentation.pdf)
