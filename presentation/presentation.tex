@@ -1,0 +1,495 @@
+\documentclass[10pt, compress]{beamer}
+
+\usetheme[usetitleprogressbar]{utopia}
+
+\usepackage{configfrancais}
+\usepackage[french]{babel}
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+\usepackage{minted}
+
+\usepgfplotslibrary{dateplot}
+
+\usemintedstyle{trac}
+
+\title{Combinatoire et chiffrement : le père Noël secret et ses applications}
+\subtitle{}
+\date{2021|22}
+\author{Stanislas MEZUREUX | 33920}
+\institute{Lycée Henri POINCARÉ}
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}
+  \frametitle{Sommaire}
+  \tableofcontents
+\end{frame}
+
+\section{Position du problème}
+
+  \begin{frame}{Père Noël secret ?}
+    \begin{minipage}[h]{0.48\textwidth}
+      \begin{figure}
+        \begin{tikzpicture}[main/.style = {draw, circle}, scale=1.5, transform shape] 
+          \node[main] (1) {$p_1$};
+          \node[main] (2) [right of=1] {$p_2$};
+          \node[main] (3) [below of=2] {$p_3$};
+          \node[main] (4) [left of=3] {$p_4$};
+          \draw[-latex] (1) to [out=90, in=90, looseness=1] (2);
+          \draw[-latex] (2) to [out=0, in=0, looseness=1] (3);
+          \draw[-latex] (3) to [out=270, in=270, looseness=1] (4);
+          \draw[-latex] (4) to [out=180, in=180, looseness=1] (1);
+        \end{tikzpicture} 
+        \caption{Un groupe}
+      \end{figure}
+    \end{minipage}
+    \begin{minipage}[h]{0.48\textwidth}
+      \begin{figure}
+        \begin{tikzpicture}[main/.style = {draw, circle}, scale=1.5, transform shape] 
+          \node[main, fill=methodBox!50] (1) {$p_1$};
+          \node[main, fill=methodBox!50] (2) [right of=1] {$p_2$};
+          \node[main] (3) [below of=2] {$p_3$};
+          \node[main] (4) [left of=3] {$p_4$};
+          \draw[-latex] (1) to (3);
+          \draw[-latex] (2) to (4);
+          \draw[-latex] (3) to [out=0, in=0, looseness=1] (2);
+          \draw[-latex] (4) to [out=180, in=180, looseness=1] (1);
+        \end{tikzpicture} 
+        \caption{Deux groupes}
+      \end{figure}
+    \end{minipage}
+  \end{frame}
+
+  \begin{frame}{Objectifs}
+    \begin{itemize}[<+- | alert@+>]
+      \item Entrée : liste des participants (nom + email + groupe)
+      \item Sortie : email
+      \item Chiffrement des données
+      \item Stockage du tirage
+      \item Preuve à divulgation nulle de connaissance
+      \item Dénombrement des tirages
+    \end{itemize}
+  \end{frame}
+
+\section{Tirage au sort}
+
+  \begin{frame}{Cas d'un groupe}
+    \begin{figure}
+      \begin{tikzpicture}[main/.style = {draw, circle}, scale=1.5, transform shape] 
+        \node[main] (1) {$p_1$};
+        \node[main] (2) [right of=1] {$p_2$};
+        \node[main] (3) [right of=2] {$p_3$};
+        \node[main] (4) [right of=3] {$\ldots$};
+        \node[main] (5) [right of=4] {$p_n$};
+        \draw[-latex] (1) to [out=80, in=100, looseness=1] (2);
+        \draw[-latex] (2) to [out=80, in=100, looseness=1] (3);
+        \draw[-latex, dashed] (3) to [out=80, in=100, looseness=1] (4);
+        \draw[-latex, dashed] (4) to [out=80, in=100, looseness=1] (5);
+        \draw[-latex] (5) to [out=270, in=270, looseness=0.5] (1);
+      \end{tikzpicture} 
+      \caption{Un seul groupe, pas de problème d'existence}
+    \end{figure}
+  \end{frame}
+
+  \begin{frame}{Cas de plusieurs groupes}
+    \begin{figure}
+      \begin{tikzpicture}[main/.style = {draw, circle}, scale=1.25, transform shape] 
+        \node[main, fill=methodBox!50] (1) {$p_1$};
+        \node[main, fill=methodBox!50] (2) [below of=1] {$p_2$};
+        \node[main] (3) [right of=2] {$p_3$};
+        \node[main] (4) [above of=3] {$p_4$};
+        \node[main] (5) [right of=4] {$p_5$};
+      \end{tikzpicture} 
+      \caption{Cas pathologique}
+    \end{figure}
+    \pause
+    \begin{alertblock}{Condition d'existence du tirage}
+      Soit \(G_1,\ldots,G_n\) les différents groupes.
+
+      \[\forall i \in \ie{1, n}, \Card(G_i) \leqslant \sum_{k\in\ie{1, n}\setminus\{i\}}\Card(G_k)\]
+    \end{alertblock}
+  \end{frame}
+
+  \begin{frame}{Création des paires}
+    Soit \(G_1,\ldots,G_n\) les différents groupes.
+    \begin{itemize}[<+- | alert@+>]
+      \item Mélanger l'ordre des groupes
+      \item Pour chaque groupe \(G_i = [p_{i, 1}, \ldots, p_{i, k}]\):
+      \begin{enumerate}[<+- | alert@+>]
+        \item \(\forall \ell \in \ie{1, k}, p_{i, \ell} \leadsto p_r\) avec \(p_r\hookleftarrow\UU(G_{(i+\ell)\%n})\) et \(\ell \not \equiv 0 [n]\)
+        \item Supprimer \(p_r\) de \(G_{(i+\ell)\%n}\)
+      \end{enumerate}
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}{Exemple}
+    \begin{minipage}[h]{0.48\textwidth}
+      \begin{figure}
+        \begin{tikzpicture}[main/.style = {draw, circle}, scale=0.75, transform shape] 
+          \node[main] (1) {$p_1$};
+          \node[main] (2) [right of=1] {$p_2$};
+          \node[main] (3) [right of=2] {$p_3$};
+          \node[main, fill=methodBox!50] (4) [below of=1] {$p_4$};
+          \node[main, fill=methodBox!50] (5) [below of=2] {$p_5$};
+          \node[main, fill=methodBox!50] (6) [below of=3] {$p_6$};
+          \node[main, fill=definitionBox!50] (7) [below of=4] {$p_7$};
+          \node[main, fill=definitionBox!50] (8) [below of=5] {$p_8$};
+          \node[main, fill=definitionBox!50] (9) [below of=6] {$p_9$};
+          \draw[-latex] (1) to (4);
+          \draw[-latex] (2) to (7);
+          \draw[-latex] (3) to (5);
+        \end{tikzpicture} 
+      \end{figure}        
+    \end{minipage}
+    \begin{minipage}[h]{0.48\textwidth}
+        \textbf{Étape 1 :} groupe \texttt{[$p_1, p_2, p_3$]}          
+        
+        $p_1 \leadsto\UU([p_4, p_5, p_6])$
+        
+        $p_2 \leadsto\UU([p_7, p_8, p_9])$
+        
+        $p_3 \leadsto\UU([p_5, p_6])$
+    \end{minipage}
+    \pause
+    \bigbreak
+    \begin{minipage}[h]{0.48\textwidth}
+      \begin{figure}
+        \begin{tikzpicture}[main/.style = {draw, circle}, scale=0.75, transform shape] 
+          \node[main] (1) {$p_1$};
+          \node[main] (2) [right of=1] {$p_2$};
+          \node[main] (3) [right of=2] {$p_3$};
+          \node[main, fill=pink] (4) [below of=1] {$p_4$};
+          \node[main, fill=pink] (5) [below of=2] {$p_5$};
+          \node[main, fill=methodBox!50] (6) [below of=3] {$p_6$};
+          \node[main, fill=pink] (7) [below of=4] {$p_7$};
+          \node[main, fill=definitionBox!50] (8) [below of=5] {$p_8$};
+          \node[main, fill=definitionBox!50] (9) [below of=6] {$p_9$};
+          \draw[-latex] (4) to (8);
+          \draw[-latex] (5) to (1);
+          \draw[-latex] (6) to (9);
+        \end{tikzpicture} 
+      \end{figure}        
+    \end{minipage}
+    \begin{minipage}[h]{0.48\textwidth}
+        \textbf{Étape 2 :} groupe \texttt{[$p_4, p_5, p_6$]}          
+        
+        $p_4 \leadsto\UU([p_8, p_9])$
+        
+        $p_5 \leadsto\UU([p_1, p_2, p_3])$
+        
+        $p_6\leadsto\UU([p_9])$
+        
+        \color{pink!150}{a déjà reçu un cadeau}
+    \end{minipage}
+    \pause
+    \bigbreak
+    \begin{minipage}[h]{0.48\textwidth}
+      \begin{figure}
+        \begin{tikzpicture}[main/.style = {draw, circle}, scale=0.75, transform shape] 
+          \node[main, fill=pink] (1) {$p_1$};
+          \node[main] (2) [right of=1] {$p_2$};
+          \node[main] (3) [right of=2] {$p_3$};
+          \node[main, fill=pink] (4) [below of=1] {$p_4$};
+          \node[main, fill=pink] (5) [below of=2] {$p_5$};
+          \node[main, fill=methodBox!50] (6) [below of=3] {$p_6$};
+          \node[main, fill=pink] (7) [below of=4] {$p_7$};
+          \node[main, fill=pink] (8) [below of=5] {$p_8$};
+          \node[main, fill=pink] (9) [below of=6] {$p_9$};
+          \draw[-latex] (7) to (2);
+          \draw[-latex] (8) to (6);
+          \draw[-latex] (9) to (3);
+        \end{tikzpicture} 
+      \end{figure}        
+    \end{minipage}
+    \begin{minipage}[h]{0.48\textwidth}
+        \textbf{Étape 3 :} groupe \texttt{[$p_7, p_8, p_9$]}          
+        
+        $p_7 \leadsto\UU([p_2, p_3])$
+        
+        $p_8 \leadsto\UU([p_6])$
+        
+        $p_9 \leadsto\UU([p_3])$
+    \end{minipage}
+  \end{frame}
+
+\section{Gestion des données}
+
+  \begin{frame}[fragile]{Représentation des données}
+    \begin{table}
+      \caption{Format des données d'entrée}
+      \begin{tabular}{ccccc}
+          \hline
+          & Prenom & NOM & Groupe & Email\\
+          \hline
+          1 & Stanislas & MEZUREUX & MPSI1 & stanmzx@gmail.com \\
+          2 & Alice & ESPINOSA & MPSI1 & aliceespinosa29@gmail.com \\
+          3 & Bob & \ldots & MPSI2 & \ldots \\
+          4 & David & \ldots & MPSI2 & \ldots \\
+          \vdots & \vdots & \vdots & \vdots & \vdots \\
+          \hline
+      \end{tabular}
+    \end{table}
+    \pause
+    \begin{longlisting}
+      \caption{Format des données manipulées}
+      \begin{minted}[linenos, fontsize=\small]{python}
+[[Stanislas, Alice], [Bob, David], ...]
+
+Stanislas = ['Stanislas', 'MEZUREUX', 'MPSI1', 'stanmzx@gmail.com']
+      \end{minted}
+    \end{longlisting}
+  \end{frame}
+
+  \begin{frame}{Définitions}
+    \begin{description}[<+->]
+      \item[Chiffrer (C)] Transformer un message afin qu'il ne soit lisible qu'à l'aide d'une clé
+      \item[Déchiffrer (D)] Opération inverse du chiffrement à l'aide de la clé
+      \item[Décrypter (A)] Opération inverse du chiffrement sans la clé
+    \end{description}
+    \bigbreak
+    \begin{figure}
+      \begin{tikzpicture}[main/.style = {draw, rectangle}]
+        \node[main] (1) {TIPE};
+        \node[main] (2) [right of=1] {C};
+        \node[main] (3) [right of=2] {\%\$ù£};
+        \node[main] (4) [right of=3] {D};
+        \node[main] (5) [right of=4] {TIPE};
+        \node[main] (6) [below of=3] {A};
+        \draw[-latex] (1) to (2);
+        \draw[-latex] (2) to (3);
+        \draw[-latex] (3) to (4);
+        \draw[-latex] (4) to (5);
+        \draw[-latex] (6) to (3);
+      \end{tikzpicture}
+      \caption{Chiffrement symétrique}
+    \end{figure}
+  \end{frame}
+
+  \begin{frame}{Cryptosystème d'ElGamal}
+    \begin{exampleblock}{Cryptosystème asymétique}
+      Chiffrement $\leadsto$ clé publique
+
+      Déchiffrement $\leadsto$ clé privée
+    \end{exampleblock}
+    \pause
+    \begin{description}[<+->]
+      \item[\texttt{NBITS}] Entier naturel strictement supérieur à 1 
+      \item[$q$] Entier premier de \texttt{NBITS} bits
+      \item[$g$] Générateur quelconque de \(\Z_{/q\Z}\)
+    \end{description}
+  \end{frame}
+
+  \begin{frame}{Cryptosystème d'ElGamal}
+    \begin{alertblock}{Générer les clés}
+      clé privée : \(x\hookleftarrow\UU(\ie{2^{\texttt{NBITS}}, q-1})\)
+
+      clé publique : \((q, g, h)\) avec \(h\egdef g^x\)
+    \end{alertblock}
+    \pause
+    \begin{alertblock}{Chiffer $m\in\N$}
+      \(r\hookleftarrow\UU(\ie{2^{\texttt{NBITS}}, q-1})\)
+
+      le message chiffré est \((g^r\text{ mod }q, mh^r\text{ mod }q)\)
+    \end{alertblock}
+    \pause
+    \begin{alertblock}{Déchiffrer $(c_1, c_2)$}
+      \(\dfrac{c_2}{c_1^x} = \dfrac{m h^r}{(g^r)^x} = \dfrac{m (g^x)^r}{(g^r)^x}q = \dfrac{m g^{xr}}{g^{xr}} = m\)
+    \end{alertblock}
+  \end{frame}
+
+  \begin{frame}{Chiffrement du tirage}
+    $n$ participants représentés par les entiers de $\ie{1, n}$
+    \bigbreak
+    $\leadsto$ tirage représenté par une liste de couples (donneur, receveur) puis chiffrée
+    \pause
+    \bigbreak
+    \begin{minipage}[h]{0.48\textwidth}
+      \begin{figure}
+        \begin{tikzpicture}[main/.style = {draw, circle}] 
+          \node[main] (1) {1};
+          \node[main] (2) [right of=1] {2};
+          \node[main] (3) [below of=2] {3};
+          \node[main] (4) [left of=3] {4};
+          \draw[-latex] (1) to [out=90, in=90, looseness=1] (2);
+          \draw[-latex] (2) to [out=0, in=0, looseness=1] (3);
+          \draw[-latex] (3) to [out=270, in=270, looseness=1] (4);
+          \draw[-latex] (4) to [out=180, in=180, looseness=1] (1);
+        \end{tikzpicture} 
+        \caption{Exemple de tirage}
+      \end{figure}
+    \end{minipage}
+    \begin{minipage}[h]{0.48\textwidth}
+      $\Rightarrow [(1, 2), (2, 3), (3, 4), (4, 1)]$
+    \end{minipage}
+    Apprès chiffrement :
+    $[((c_1, c_2), (c_3, c_4)), ((c_3, c_4), (c_5, c_6)), ((c_5, c_6), (c_7, c_8)), ((c_7, c_8), (c_1, c_2))]$
+  \end{frame}
+
+  \begin{frame}{Preuve à divulgation nulle de connaissance}
+    Validité du tirage : chaque participant donne et reçoit exactement 1 cadeau
+    \begin{alertblock}{Condition de validité du tirage}
+      Soit $[(d_1, r_1), \ldots, (d_n, r_n)]$ le tirage.
+        \(\text{le tirage est valide} \iff
+        \begin{cases}
+            \displaystyle\prod_{i=1}^nd_i=n ! \\
+            \displaystyle\prod_{i=1}^nr_i=n !
+        \end{cases}\)
+    \end{alertblock}
+  \end{frame}
+
+  \begin{frame}{Chiffrement homomorphe}
+    \begin{exampleblock}{Définition}
+      Le cryptographe peut effectuer des opérations entre entiers chiffrés.
+
+      \textsc{ElGamal} est homomorphe vis-à-vis de la multiplication.
+    \end{exampleblock}
+    Soit $m_1$ et $m_2$ chiffrés respectivement par $(c_{1, 1}, c_{1, 2})$ et $(c_{2, 1}, c_{2, 2})$.
+    \begin{align*}
+      \dfrac{c_{1, 2} c_{2, 2}}{(c_{1, 1} c_{2, 1})^x}
+      &= \dfrac{m_1 h^{r_1} m_2  h^{r_2}}{(g^{r_1} g^{r_2})^x} \\
+      &= \dfrac{m_1m_2 h^{r_1+r_2}}{(g^{r_1+r_2})^x} \\
+      &= \dfrac{m_1m_2(g^x)^{r_1+r_2}}{(g^{r_1+r_2})^x} \\
+      &= m_1m_2\text{ mod }q
+    \end{align*}
+  \end{frame}
+
+\section{Dénombrement des tirages}
+
+  \begin{frame}{Estimation algorithmique}
+    $p$ : nombre de personnes par groupe 
+    
+    $n$ : nombre de groupes
+    \begin{figure}
+      \begin{tikzpicture}
+        \begin{semilogyaxis}[
+          mlineplot,
+          width=0.9\textwidth,
+          xlabel=$p$, xlabel style={at=(current axis.right of origin), anchor=west},
+          height=6cm,
+        ]
+
+        \addplot [
+          domain=0:10, 
+          samples=11, 
+          color=TolColor2,
+        ]
+        {x!};
+        \addlegendentry{1 groupe}
+        \addplot [
+          domain=0:10, 
+          samples=11, 
+          color=TolColor7,
+        ]
+        {(x!)^2};
+        \addlegendentry{2 groupes}
+        \addplot [
+          domain=0:10, 
+          samples=11, 
+          color=TolColor9,
+        ]
+        {(x!)^3};
+        \addlegendentry{3 groupes}
+
+        \end{semilogyaxis}
+      \end{tikzpicture}
+      \caption{Nombre de tirages possibles}
+    \end{figure}
+  \end{frame}
+
+\section{Conclusion}
+
+  \begin{frame}{Conclusion}
+    \begin{itemize}[<+- | alert@+>]
+      \item Algorithme opérationnel
+      \item Prévention contre la triche
+      \item Nombreux domaines d'application
+    \end{itemize}
+  \end{frame}
+
+\plain{Questions?}
+
+\section{Annexes}
+
+  \begin{frame}[fragile, noframenumbering]{Code chiffrement homomorphe}
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=1, lastline=16]{python}{../elgamal.py}
+  \end{frame}
+
+  \begin{frame}[fragile, noframenumbering]{Code chiffrement homomorphe}
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=17, lastline=31]{python}{../elgamal.py}
+  \end{frame}
+
+  \begin{frame}[fragile, noframenumbering]{Code chiffrement homomorphe}
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=32, lastline=47]{python}{../elgamal.py}
+  \end{frame}
+
+  \begin{frame}[fragile, noframenumbering]{Code chiffrement homomorphe}
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=48, lastline=63]{python}{../elgamal.py}
+  \end{frame}
+
+  \begin{frame}[fragile, noframenumbering]{Code chiffrement homomorphe}
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=64, lastline=79]{python}{../elgamal.py}
+  \end{frame}
+
+  \begin{frame}[fragile, noframenumbering]{Code chiffrement homomorphe}
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=80, lastline=88]{python}{../elgamal.py}
+  \end{frame}
+
+  \begin{frame}[fragile, noframenumbering]{Code Secret Santa}
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=1, lastline=16]{python}{../SecretSanta.py}
+  \end{frame}
+
+  \begin{frame}[fragile, noframenumbering]{Code Secret Santa}
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=17, lastline=31]{python}{../SecretSanta.py}
+  \end{frame}
+
+  \begin{frame}[fragile, noframenumbering]{Code Secret Santa}
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=32, lastline=47]{python}{../SecretSanta.py}
+  \end{frame}
+
+  \begin{frame}[fragile, noframenumbering]{Code Secret Santa}
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=48, lastline=63]{python}{../SecretSanta.py}
+  \end{frame}
+
+  \begin{frame}[fragile, noframenumbering]{Code Secret Santa}
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=64, lastline=79]{python}{../SecretSanta.py}
+  \end{frame}
+
+  \begin{frame}[fragile, noframenumbering]{Code Secret Santa}
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=80, lastline=94]{python}{../SecretSanta.py}
+  \end{frame}
+
+  \begin{frame}[fragile, noframenumbering]{Code Secret Santa}
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=95, lastline=107]{python}{../SecretSanta.py}
+  \end{frame}
+
+  \begin{frame}[fragile, noframenumbering]{Code Secret Santa}
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=108, lastline=118]{python}{../SecretSanta.py}
+  \end{frame}
+
+  \begin{frame}[fragile, noframenumbering]{Code Secret Santa}
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=119, lastline=133]{python}{../SecretSanta.py}
+  \end{frame}
+
+  \begin{frame}[fragile, noframenumbering]{Code Secret Santa}
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=134, lastline=148]{python}{../SecretSanta.py}
+  \end{frame}
+
+  \begin{frame}[fragile, noframenumbering]{Code Secret Santa}
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=149, lastline=161]{python}{../SecretSanta.py}
+  \end{frame}
+
+  \begin{frame}[fragile, noframenumbering]{Code dénombrement tirages}
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=1, lastline=16]{python}{../draw_counter.py}
+  \end{frame}
+
+  \begin{frame}[fragile, noframenumbering]{Code dénombrement tirages}
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=17, lastline=32]{python}{../draw_counter.py}
+  \end{frame}
+
+  \begin{frame}[fragile, noframenumbering]{Code dénombrement tirages}
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=33, lastline=47]{python}{../draw_counter.py}
+  \end{frame}
+
+\end{document}

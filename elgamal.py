@@ -1,3 +1,12 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created in 2021
+
+@author: Stanislas MEZUREUX
+Copyright (c) 2021 Stanislas MEZUREUX. All rights reserved.
+"""
+
 import random
 
 NUMBITS = 1024
@@ -5,7 +14,7 @@ NUMBITS = 1024
 # q -> cyclic group order 
 # g -> cyclic group generator 
 # x -> prvate key
-# (q, g, h) where h = g**x mod p -> private key
+# (q, g, h) where h = g**x mod q -> private key
 
 def gcd(a, b):
     if a < b:

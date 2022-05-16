@@ -16,3 +16,15 @@
   - RDV TIPE mercredi 
   - Implémentation zero-knowledge proof
   - Craig Gentry remplacé par ElGamal
+
+>> Semaine du 28/02/2022 :
+  - Synthèse des preuves et des explications en LaTeX
+
+>> Semaine du 14/03/2022 : 
+  - RDV TIPE mercredi
+
+>> Semaine du 04/04/2022 :
+  - Algorithme de dénombrement des tirages
+
+>> Semaine du 16/05/2022 :
+  - Présentation 

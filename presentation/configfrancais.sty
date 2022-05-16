@@ -1,0 +1,61 @@
+% Created in 2022
+%
+% @author: Stanislas MEZUREUX
+% Copyright (c) 2021 Stanislas MEZUREUX. All rights reserved.
+
+
+%%%%%%%%%%%%%%%-- Packages --%%%%%%%%%%%%%%%%
+\usepackage{latexsym}
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage{stmaryrd}
+\usepackage[figurename=Code]{caption}
+\usepackage{xcolor}
+\usepackage{cancel}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%*%%%%%-- Colors --%%%%%%%%%%%%%%%%%
+\definecolor{mainColor}{HTML}{A4BAB7}
+\definecolor{definitionBox}{HTML}{68E1AA}
+\definecolor{theoremBox}{HTML}{FF7878}
+\definecolor{exampleBox}{HTML}{51B5F8}
+\definecolor{methodBox}{HTML}{B869EA}
+\definecolor{propertyBox}{HTML}{FF5500}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%-- Operateurs --%%%%%%%%%%%%%%%
+\newcommand{\Card}{\mathop{\text{Card}}\nolimits}
+\newcommand{\Var}{\mathop{\text{Var}}\nolimits}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%-- Commandes --%%%%%%%%%%%%%%%
+\newcommand{\un}{\mathds{1}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\I}{\mathbb{I}}
+\newcommand{\J}{\mathbb{J}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\EE}{\mathcal{E}}
+\newcommand{\UU}{\mathcal{U}}
+
+\newcommand{\e}{\mathop{\mathrm{e}}\nolimits}
+
+\newcommand{\ie}[1]{\left\llbracket#1\right\rrbracket}
+\newcommand{\egdef}{\stackrel{\text{déf}}{=}}
+\newcommand{\dt}{\mathrm{d}}
+\newcommand{\bracket}[1]{\langle #1\rangle}
+\newcommand{\App}[5]{
+ \begin{array}[t]{r c c l}
+ #1 \textnormal{:}& #2 & \longrightarrow & #3 \\
+       & #4 & \longmapsto & #5 
+ \end{array}
+ }
+
+ \newcommand{\important}[1]{\textbf{\textsf{#1}}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%-- Code --%%%%%%%%%%%%%%%%%%
+\newenvironment{longlisting}{\captionsetup{type=figure}}{}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
