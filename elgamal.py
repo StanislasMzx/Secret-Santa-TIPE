@@ -26,7 +26,7 @@ def gcd(a, b):
 
 
 # Miller-Rabin
-# https://medium.com/@prudywsh/how-to-generate-big-prime-numbers-miller-rabin-49e6e6af32fb
+# medium.com/@prudywsh/how-to-generate-big-prime-numbers-miller-rabin-49e6e6af32fb
 def is_prime(n, k=128):
     if n == 2 or n == 3:
         return True

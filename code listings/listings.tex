@@ -1,0 +1,34 @@
+\documentclass[12pt]{report}
+
+\usepackage{configfrancais}
+
+\title{Listings}
+\author{Stanislas Mezureux}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+% \tableofcontents
+
+\renewcommand{\labelitemi}{$\color{mainColor}{\rhd}$}
+
+\section{Cryptosystème d'\textsc{ElGamal}}
+    \begin{longlisting}
+        \caption{elgamal.py}
+        \inputminted[linenos, breaklines, autogobble]{python}{../elgamal.py}
+    \end{longlisting}
+
+\section{Secret Santa}
+    \begin{longlisting}
+        \caption{SecretSanta.py}
+        \inputminted[linenos, breaklines, autogobble]{python}{../SecretSanta.py}
+    \end{longlisting}
+
+\section{Dénombrement des tirages}
+    \begin{longlisting}
+        \caption{draw\_counter.py}
+        \inputminted[linenos, breaklines, autogobble]{python}{../draw_counter.py}
+    \end{longlisting}
+            
+\end{document}
