@@ -28,7 +28,7 @@
 \DeclareOptionBeamer{blockbg}{%
   \PassOptionsToPackage{blockbg}{beamercolorthemeutopia}%
 }
-\DeclareOptionBeamer{nooffset}{\setlength{\@mtheme@voffset}{0em}}
+\DeclareOptionBeamer{nooffset}{\setlength{\@mtheme@voffset}{1em}}
 
 \DeclareOptionBeamer*{%
   \PackageWarning{beamerthemem}{Unknown option `\CurrentOption'}%
@@ -239,15 +239,30 @@
 %{{{ --- Sections ---------------------
 
 % Insert frame with section title at every section start
+% Remove title frame dot from minipage
+\makeatletter
+\let\beamer@writeslidentry@miniframeson=\beamer@writeslidentry
+\def\beamer@writeslidentry@miniframesoff{%
+  \expandafter\beamer@ifempty\expandafter{\beamer@framestartpage}{}% does not happen normally
+  {%else
+    % removed \addtocontents commands
+    \clearpage\beamer@notesactions%
+  }
+}
+\newcommand*{\miniframeson}{\let\beamer@writeslidentry=\beamer@writeslidentry@miniframeson}
+\newcommand*{\miniframesoff}{\let\beamer@writeslidentry=\beamer@writeslidentry@miniframesoff}
+% Remove title frame dot from minipage
 \AtBeginSection[]
 {
   \begingroup
 %   \setbeamercolor{background canvas}{parent=palette primary}
   \setbeamercolor{background canvas}{bg=mDarkTeal}
+  \miniframesoff
   \begin{frame}[plain, noframenumbering]
     \vspace{2em}\usebeamerfont{section title}
     \progressbar@sectionprogressbar%
   \end{frame}
+  \miniframeson
   \endgroup
 }
 
@@ -295,6 +310,7 @@
   \end{beamercolorbox}
 \fi
 \vspace{\@mtheme@voffset}
+% \vspace{0.5em}
 }
 
 %}}}
