@@ -131,6 +131,13 @@ def zero_knowledge_proof(sk, pk):
         gift_from = eg.multiply(gift_from, ssd.draw[i][0])
         gift_to = eg.multiply(gift_to, ssd.draw[i][1])
     fact = factorial(ssd.draw_len)
+    for j in range(1, ssd.draw_len):
+        for i in range(1, j):
+            c_i = ssd.draw[i]
+            c_j = ssd.draw[j]
+            if (eg.multiply(c_i[0], c_j[0]) == eg.multiply(c_i[0], c_i[0]) or
+                eg.multiply(c_i[1], c_j[1]) == eg.multiply(c_i[1], c_i[1])):
+                return False
     return eg.decrypt(gift_from, sk, pk) == fact and eg.decrypt(gift_to, sk, pk) == fact
 
 

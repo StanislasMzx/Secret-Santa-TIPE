@@ -26,6 +26,15 @@
 
 \section{$\hat[santa]{\text{1.}}$\quad Position du problème}
 
+  \begin{frame}{Contexte}
+    \begin{itemize}
+      \item \alert{Communications électroniques} en plein essor
+      \item Sécurité du \alert{canal de transmission}
+      \item Générateur \alert{aléatoire} de paires 
+      \item Même nature que \alert{vote électronique, reviewing}
+    \end{itemize}
+  \end{frame}
+
   \begin{frame}{Père Noël secret ?}
     \begin{minipage}[h]{0.48\textwidth}
       \begin{figure}
@@ -60,13 +69,10 @@
   \end{frame}
 
   \begin{frame}{Objectifs}
-    \begin{itemize}[<+- | alert@+>]
-      \item Entrée : liste des participants (nom + adresse email + groupe)
-      \item Sortie : email
-      \item Chiffrement des données
-      \item Stockage du tirage
-      \item Preuve de validité du tirage
-      \item Dénombrement des tirages
+    \begin{itemize}
+      \item \alert{Entrée} : liste des participants (nom + contact + groupe)
+      \item \alert{Sortie} : issue du tirage
+      \item \alert{Chiffrement} des données
     \end{itemize}
   \end{frame}
 
@@ -111,12 +117,12 @@
 
   \begin{frame}{Création des paires}
     Soit \(G_1,\ldots,G_n\) les différents groupes.
-    \begin{itemize}[<+- | alert@+>]
-      \item Mélanger l'ordre des groupes
+    \begin{itemize}
+      \item \alert{Mélanger} l'ordre des groupes
       \item Pour chaque groupe \(G_i = [p_{i, 1}, \ldots, p_{i, k}]\):
-      \begin{enumerate}[<+- | alert@+>]
+      \begin{enumerate}
         \item \(\forall \ell \in \ie{1, k}, p_{i, \ell} \leadsto p_r\) avec \(p_r\hookleftarrow\UU(G_{(i+\ell)\%n})\) et \(\ell \not \equiv 0 [n]\)
-        \item Supprimer \(p_r\) de \(G_{(i+\ell)\%n}\)
+        \item \alert{Supprimer} \(p_r\) de \(G_{(i+\ell)\%n}\)
       \end{enumerate}
     \end{itemize}
   \end{frame}
@@ -271,9 +277,9 @@
     \begin{longlisting}
       \caption{Format des données manipulées}
       \begin{minted}[linenos, fontsize=\small]{python}
-[[Stanislas, Alice], [Bob, David], ...]
+[[1, 2], [3, 4], ...]
 
-Stanislas = ['Stanislas', 'MEZUREUX', 'MPSI1', 'stanmzx@gmail.com']
+1 = ['Stanislas', 'MEZUREUX', 'MPSI1', 'stanmzx@gmail.com']
       \end{minted}
     \end{longlisting}
   \end{frame}
@@ -371,7 +377,7 @@ Stanislas = ['Stanislas', 'MEZUREUX', 'MPSI1', 'stanmzx@gmail.com']
   \begin{frame}{Chiffrement du tirage}
     $n$ participants représentés par les entiers de $\ie{1, n}$
     \bigbreak
-    $\leadsto$ tirage représenté par une liste de couples (donneur, receveur) puis chiffrée
+    $\leadsto$ tirage représenté par une liste de \alert{couples (donneur, receveur)} puis chiffrée
     \bigbreak
     \begin{minipage}[h]{0.48\textwidth}
       \begin{figure}
@@ -397,21 +403,27 @@ Stanislas = ['Stanislas', 'MEZUREUX', 'MPSI1', 'stanmzx@gmail.com']
     Validité du tirage : chaque participant donne et reçoit exactement 1 cadeau
     \begin{alertblock}{Condition de validité du tirage}
       Soit $[(d_1, r_1), \ldots, (d_n, r_n)]$ le tirage.
-        \(\text{le tirage est valide} \iff
+        \(
         \begin{cases}
             \displaystyle\prod_{i=1}^nd_i=n ! \\
             \displaystyle\prod_{i=1}^nr_i=n !
-        \end{cases}\)
+        \end{cases}
+        \quad\text{ et }\quad 
+        \forall(i, j)\in\ie{1, n}^2 / i<j 
+        \begin{cases}
+          d_i\neq d_j \\
+          r_i\neq r_j
+      \end{cases}\)
     \end{alertblock}
   \end{frame}
 
 \section{$\hat[santa]{\text{4.}}$\quad Conclusion}
 
   \begin{frame}{Conclusion}
-    \begin{itemize}[<+- | alert@+>]
-      \item Algorithme opérationnel
-      \item Prévention contre la triche
-      \item Nombreux domaines d'application
+    \begin{itemize}
+      \item \alert{Algorithme} opérationnel
+      \item Prévention contre la \alert{triche}
+      \item Nombreux domaines d'\alert{application}
     \end{itemize}
   \end{frame}
 
@@ -436,80 +448,72 @@ Stanislas = ['Stanislas', 'MEZUREUX', 'MPSI1', 'stanmzx@gmail.com']
     \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=1, lastline=16]{python}{../elgamal.py}
   \end{frame}
 
-  \begin{frame}[fragile, noframenumbering]{Code chiffrement homomorphe}
-    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=17, lastline=31]{python}{../elgamal.py}
+  \begin{frame}[fragile, noframenumbering]
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=17, lastline=35]{python}{../elgamal.py}
   \end{frame}
 
-  \begin{frame}[fragile, noframenumbering]{Code chiffrement homomorphe}
-    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=32, lastline=47]{python}{../elgamal.py}
+  \begin{frame}[fragile, noframenumbering]
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=36, lastline=55]{python}{../elgamal.py}
   \end{frame}
 
-  \begin{frame}[fragile, noframenumbering]{Code chiffrement homomorphe}
-    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=48, lastline=63]{python}{../elgamal.py}
+  \begin{frame}[fragile, noframenumbering]
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=56, lastline=75]{python}{../elgamal.py}
   \end{frame}
 
-  \begin{frame}[fragile, noframenumbering]{Code chiffrement homomorphe}
-    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=64, lastline=79]{python}{../elgamal.py}
-  \end{frame}
-
-  \begin{frame}[fragile, noframenumbering]{Code chiffrement homomorphe}
-    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=80, lastline=88]{python}{../elgamal.py}
+  \begin{frame}[fragile, noframenumbering]
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=76, lastline=88]{python}{../elgamal.py}
   \end{frame}
 
   \begin{frame}[fragile, noframenumbering]{Code Secret Santa}
     \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=1, lastline=16]{python}{../SecretSanta.py}
   \end{frame}
 
-  \begin{frame}[fragile, noframenumbering]{Code Secret Santa}
-    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=17, lastline=31]{python}{../SecretSanta.py}
+  \begin{frame}[fragile, noframenumbering]
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=17, lastline=35]{python}{../SecretSanta.py}
   \end{frame}
 
-  \begin{frame}[fragile, noframenumbering]{Code Secret Santa}
-    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=32, lastline=47]{python}{../SecretSanta.py}
+  \begin{frame}[fragile, noframenumbering]
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=36, lastline=55]{python}{../SecretSanta.py}
   \end{frame}
 
-  \begin{frame}[fragile, noframenumbering]{Code Secret Santa}
-    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=48, lastline=63]{python}{../SecretSanta.py}
+  \begin{frame}[fragile, noframenumbering]
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=56, lastline=75]{python}{../SecretSanta.py}
   \end{frame}
 
-  \begin{frame}[fragile, noframenumbering]{Code Secret Santa}
-    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=64, lastline=79]{python}{../SecretSanta.py}
+  \begin{frame}[fragile, noframenumbering]
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=76, lastline=94]{python}{../SecretSanta.py}
   \end{frame}
 
-  \begin{frame}[fragile, noframenumbering]{Code Secret Santa}
-    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=80, lastline=94]{python}{../SecretSanta.py}
+  \begin{frame}[fragile, noframenumbering]
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=95, lastline=110]{python}{../SecretSanta.py}
   \end{frame}
 
-  \begin{frame}[fragile, noframenumbering]{Code Secret Santa}
-    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=95, lastline=107]{python}{../SecretSanta.py}
+  \begin{frame}[fragile, noframenumbering]
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=111, lastline=127]{python}{../SecretSanta.py}
   \end{frame}
 
-  \begin{frame}[fragile, noframenumbering]{Code Secret Santa}
-    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=108, lastline=118]{python}{../SecretSanta.py}
+  \begin{frame}[fragile, noframenumbering]
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=128, lastline=144]{python}{../SecretSanta.py}
   \end{frame}
 
-  \begin{frame}[fragile, noframenumbering]{Code Secret Santa}
-    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=119, lastline=133]{python}{../SecretSanta.py}
+  \begin{frame}[fragile, noframenumbering]
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=145, lastline=164]{python}{../SecretSanta.py}
   \end{frame}
 
-  \begin{frame}[fragile, noframenumbering]{Code Secret Santa}
-    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=134, lastline=148]{python}{../SecretSanta.py}
-  \end{frame}
-
-  \begin{frame}[fragile, noframenumbering]{Code Secret Santa}
-    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=149, lastline=161]{python}{../SecretSanta.py}
+  \begin{frame}[fragile, noframenumbering]
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=165, lastline=184]{python}{../SecretSanta.py}
   \end{frame}
 
   \begin{frame}[fragile, noframenumbering]{Code dénombrement tirages}
     \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=1, lastline=16]{python}{../draw_counter.py}
   \end{frame}
 
-  \begin{frame}[fragile, noframenumbering]{Code dénombrement tirages}
-    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=17, lastline=32]{python}{../draw_counter.py}
+  \begin{frame}[fragile, noframenumbering]
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=17, lastline=36]{python}{../draw_counter.py}
   \end{frame}
 
-  \begin{frame}[fragile, noframenumbering]{Code dénombrement tirages}
-    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=33, lastline=47]{python}{../draw_counter.py}
+  \begin{frame}[fragile, noframenumbering]
+    \inputminted[linenos, breaklines, autogobble, fontsize=\small, firstline=37, lastline=56]{python}{../draw_counter.py}
   \end{frame}
 
 \end{document}
