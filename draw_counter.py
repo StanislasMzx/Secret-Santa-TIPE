@@ -43,5 +43,4 @@ def count(p, n):
             res += 1
     return res
 
-
-# print(count(4, 1))
+# print(count(10, 3))
