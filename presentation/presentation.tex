@@ -18,7 +18,7 @@
 \subtitle{}
 \date{2021|22}
 \author{Stanislas MEZUREUX | 33920}
-\institute{Lycée Henri POINCARÉ}
+\institute{Travail d'Initiative Personnelle Encadré}
 
 \begin{document}
 
@@ -400,6 +400,8 @@
   \end{frame}
 
   \begin{frame}{Preuve à divulgation nulle de connaissance}
+    \alert{ZKP} : Zero Knowledge Proof 
+    \bigbreak
     Validité du tirage : chaque participant donne et reçoit exactement 1 cadeau
     \begin{alertblock}{Condition de validité du tirage}
       Soit $[(d_1, r_1), \ldots, (d_n, r_n)]$ le tirage.
@@ -412,9 +414,24 @@
         \forall(i, j)\in\ie{1, n}^2 / i<j 
         \begin{cases}
           d_i\neq d_j \\
-          r_i\neq r_j
+          r_i\neq r_j \\
+          d_j\neq r_j
       \end{cases}\)
     \end{alertblock}
+  \end{frame}
+
+  \begin{frame}{Bilan}
+    \begin{table}
+      \begin{tabular}{@{}c|cccc@{}}
+        \cmidrule(l){2-5}
+                            & 1 groupe         & 2 groupes $=$    & 2 groupes $\neq$ & $n$ groupes      \\ \midrule
+        Condition $\exists$ & \alert{\faCheck} & \alert{\faCheck} & \alert{\faCheck} & \alert{\faCheck} \\
+        Tirage              & \alert{\faCheck} & \alert{\faCheck} & \alert{\faCheck} & \alert{\faCheck} \\
+        Chiffrer            & \alert{\faCheck} & \alert{\faCheck} & \alert{\faCheck} & \alert{\faCheck} \\
+        Dénombrer           & \alert{\faCheck} & \alert{\faCheck} & \faClose         & \faClose         \\
+        ZKP                 & \alert{\faCheck} & \faClose         & \faClose         & \faClose         \\ \bottomrule
+        \end{tabular}
+    \end{table}
   \end{frame}
 
 \section{$\hat[santa]{\text{4.}}$\quad Conclusion}

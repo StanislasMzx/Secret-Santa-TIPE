@@ -86,3 +86,9 @@ def multiply(n1, n2):
     n1c1, n1c2 = n1['c1'], n1['c2']
     n2c1, n2c2 = n2['c1'], n2['c2']
     return {'c1': n1c1*n2c1, 'c2': n1c2*n2c2}
+
+
+def is_equal(n1, n2, sk, pk):
+    d = {'c1': n1['c1']*pow(n2['c1'], -1, pk['q']), 
+         'c2': n1['c2']*pow(n2['c2'], -1, pk['q'])}
+    return decrypt(d, sk, pk) == 1
