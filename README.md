@@ -56,6 +56,8 @@ GMAIL_ADDRESS = 'secret.santa.tipe@gmail.com'
 GMAIL_PASSWORD = '***secret(santa)'
 ```
 
+> Remark : Gmail account allows you to send 100 emails per day via this application
+
 ### 3 - Check the data input format
 
 **The list of participants must be a [csv file](https://fr.wikipedia.org/wiki/Comma-separated_values) stored in <code>/draw_files</code> and must have the following format :**
