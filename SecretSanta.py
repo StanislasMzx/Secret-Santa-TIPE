@@ -18,6 +18,8 @@ from math import factorial
 AMOUNT = 10
 NAME = 'MPSI1 227/228'
 DATE = '03/01/2022'
+GMAIL_ADDRESS = 'secret.santa.tipe@gmail.com'
+GMAIL_PASSWORD = '**secret(santa:)**'
 
 
 class TooMuchInTheTeam(Exception):
@@ -64,7 +66,7 @@ def make_pairs(L, pk):
         for i in range(length):
             R[i] = (eg.encrypt(M[i]+1, pk),
                     eg.encrypt(M[(i+1) % length]+1, pk))
-        with open('secret_santa_draw.py', 'w') as f:
+        with open('/draw_files/secret_santa_draw.py', 'w') as f:
             f.write(f'draw = {R}')
         return R
     R = []
@@ -82,7 +84,7 @@ def make_pairs(L, pk):
             gift_to = M_next[k]
             R.append((eg.encrypt(e+1, pk),
                       eg.encrypt(gift_to+1, pk)))
-            with open('example/secret_santa_draw.py', 'w') as f:
+            with open('draw_files/secret_santa_draw.py', 'w') as f:
                 f.write(f'draw = {R}\ndraw_len = {len(R)}')
             del M_next[k]
             if M_next_len == 1:
@@ -91,13 +93,13 @@ def make_pairs(L, pk):
 
 
 def send_email(L, data, sk, pk, display_team=True):
-    from_addr = 'secret.santa.tipe@gmail.com'
+    from_addr = GMAIL_ADDRESS
 
     server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
     server.set_debuglevel(1)
     server.ehlo
 
-    server.login('secret.santa.tipe@gmail.com', 'pamnkvauruvqndga')
+    server.login(GMAIL_ADDRESS, GMAIL_PASSWORD)
 
     for e_encrypted in L:
         e = (eg.decrypt(e_encrypted[0], sk, pk)-1,
@@ -106,8 +108,8 @@ def send_email(L, data, sk, pk, display_team=True):
         subject = f"Secret Santa - {NAME}"
         text = (
             f'Bonjour {data[e[0]][1]},\nCette année, tu es en charge du '
-            f'cadeau de {data[e[1]][1]} {data[e[1]][2]} '
-            f'{"("+data[e[1]][3]+")" if display_team else ""}. Je te rappelle '
+            f'cadeau de {data[e[1]][1]} {data[e[1]][2]}'
+            f'{" ("+data[e[1]][3]+")" if display_team else ""}. Je te rappelle '
             f'que le budget est de {AMOUNT}€ et que la célébration aura lieu '
             f'le {DATE}.\nJoyeux Nöel à toi !'
         )
@@ -122,11 +124,11 @@ def send_email(L, data, sk, pk, display_team=True):
 
 
 def zero_knowledge_proof(sk, pk):
-    import example.secret_santa_draw as ssd
+    import draw_files.secret_santa_draw as ssd
     if ssd.draw_len == 1:
         return True
     gift_from = ssd.draw[0][0]
-    gift_to =  ssd.draw[0][1]
+    gift_to = ssd.draw[0][1]
     for i in range(1, ssd.draw_len):
         gift_from = eg.multiply(gift_from, ssd.draw[i][0])
         gift_to = eg.multiply(gift_to, ssd.draw[i][1])
@@ -137,7 +139,7 @@ def zero_knowledge_proof(sk, pk):
             c_j = ssd.draw[j]
             if (eg.is_equal(c_i[0], c_j[0], sk, pk) or
                 eg.is_equal(c_i[1], c_j[1], sk, pk) or
-                eg.is_equal(c_j[0], c_j[1], sk, pk)):
+                    eg.is_equal(c_j[0], c_j[1], sk, pk)):
                 return False
     return eg.decrypt(gift_from, sk, pk) == fact and eg.decrypt(gift_to, sk, pk) == fact
 
@@ -152,18 +154,16 @@ def Secret_Santa(data):
         R = make_pairs(L, pk)
         print(f'secret key : {sk}')
         print(f'public key : {pk}')
-        # send_email(R, info, sk, pk, nb_teams != 1)
+        send_email(R, info, sk, pk, nb_teams != 1)
     except TooMuchInTheTeam as TeamError:
         print(TeamError)
 
 
 def resend(sk, pk, data):
     try:
-        import example.secret_santa_draw as ssd
+        import draw_files.secret_santa_draw as ssd
         info = csv_to_list(data)
         nb_teams = len(ssd.draw)
         send_email(ssd.draw, info, sk, pk, nb_teams != 1)
     except ModuleNotFoundError as Error:
         print(Error)
-
-# Secret_Santa('example/data.csv')
